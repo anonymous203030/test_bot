@@ -22,8 +22,8 @@ class UpworkXMLFilter:
         self.URL = xml_url
         self.xml = self.get_xml_()
         self.data = self.filter_data()
-        sqliteConnection = sqlite3.connect(dbase_fname)
-        self.cursor = sqliteConnection.cursor()
+        self.conn = sqlite3.connect(dbase_fname)
+        self.cursor = self.conn.cursor()
         self.new_data = self.check_data()
 
     def get_xml_(self):
@@ -96,6 +96,7 @@ class UpworkXMLFilter:
                               f" VALUES ('{each_content['title']}', '{each_content['link']}', " \
                               f"'{each_content['description']}', '{each_content['guid']}', '{each_content['pubDate']}')"
                 self.cursor.execute(insert_data)
+                self.conn.commit()
 
         print('Data Has Been Checked.')
 
@@ -148,6 +149,5 @@ if __name__ == '__main__':
     print("1")
     bot.start()
     print("2")
-    # bot.run_until_disconnected()
     print("3")
     check_for_updates()
